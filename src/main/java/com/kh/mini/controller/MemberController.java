@@ -1,9 +1,12 @@
 package com.kh.mini.controller;
 
+import com.kh.mini.dao.MemberDAO;
+import com.kh.mini.vo.MemberVO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -17,6 +20,17 @@ public class MemberController {
         String pwd = loginData.get("pwd");
         System.out.println("ID : " + id);
         System.out.println("PWD : " + pwd);
-        return new ResponseEntity<>(true, HttpStatus.OK);
+        MemberDAO dao = new MemberDAO();
+        boolean res = dao.loginCheck(id,pwd);
+        return new ResponseEntity<>(res, HttpStatus.OK);
         }
+    
+    // GET : 회원 조회
+    @GetMapping("/member")
+    public ResponseEntity<List<MemberVO>> memberList(@RequestParam String id) {
+        System.out.println("ID : " + id);
+        MemberDAO dao = new MemberDAO();
+        List<MemberVO> list = dao.memberSelect(id);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
+}
